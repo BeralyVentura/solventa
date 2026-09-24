@@ -1,5 +1,9 @@
 # Experimento individual H4.3.1 - escalabilidad
 
+El informe consolidado listo para revisión está en
+`output/pdf/Informe_Experimento_H4_3_1.pdf`; los valores fuente y la decisión se
+mantienen también en [RESULTADOS.md](./RESULTADOS.md).
+
 ## Correspondencia con la aplicación
 
 La HU4.3.1 pide recalcular al menos 10 millones de perfiles en menos de dos
@@ -32,8 +36,10 @@ latencias del flujo de reprocesamiento que la aplicación realmente implementa.
 ## Requisitos
 
 - Docker con Compose.
-- k6 instalado en una máquina distinta al servidor en la medición AWS. Ejecutar
-  carga y aplicación en la misma máquina solo sirve como ensayo local.
+- k6 instalado en una máquina distinta al servidor en la medición AWS. Para el
+  ensayo local, si k6 no está instalado el script usa automáticamente su imagen
+  oficial de Docker. Ejecutar carga y aplicación en la misma máquina solo sirve
+  como ensayo local.
 - Puertos 8080 (entrada) y 5432 (interno, no publicado) disponibles.
 
 ## Ensayo reproducible local
@@ -60,9 +66,11 @@ API_CPUS=2 API_MEMORY=2g npm run experiment:h431 -- vertical
 API_CPUS=3 API_MEMORY=3g npm run experiment:h431 -- vertical
 ```
 
-Cada ejecución crea una carpeta UTC bajo `results/<modo>/` con un JSON resumen,
-CSV crudo y logs. Esos archivos se ignoran en Git para evitar presentar datos
-inventados o accidentales. La duración por nivel es 2 minutos; para un ensayo
+Cada ejecución crea una carpeta UTC bajo `results/<modo>/` con un JSON resumen
+por nivel, configuración y logs. Esos archivos se ignoran en Git para evitar
+presentar datos inventados o accidentales. No se genera CSV por defecto porque
+una matriz completa puede ocupar varios GiB; agréguese `--out csv=...` a k6 solo
+si hay espacio suficiente. La duración por nivel es 2 minutos; para un ensayo
 rápido se puede usar `DURATION=10s RATES="200 500"`.
 
 ## Ejecución en AWS y evidencia
@@ -86,7 +94,7 @@ el experimento sin confundir un ensayo local con evidencia AWS es:
 ```bash
 BASE_URL="http://DNS-DEL-ALB" RATE=200 DURATION=2m \
   SUMMARY_FILE=summary-200-tps.json \
-  k6 run --out csv=metrics-200-tps.csv experiments/h4.3.1/k6/reprocesamiento.js
+  k6 run experiments/h4.3.1/k6/reprocesamiento.js
 ```
 
 Repetir el comando con 500, 800, 1.100 y 1.400. Antes de cada comparación usar
@@ -101,7 +109,7 @@ de la API; debe registrarse como limitación, no ocultarse.
 Mostrar, en este orden: ASR e hipótesis (30 s); consola AWS con despliegue
 vertical y luego grupo de tres instancias/ALB (60 s); recorrido por controller,
 service, k6 y Compose (60 s); ejecución visible de un nivel de carga (60 s);
-JSON/CSV, métricas CloudWatch, tabla comparativa, conclusión y decisión de
+JSON, métricas CloudWatch, tabla comparativa, conclusión y decisión de
 arquitectura (90 s). Explicar con palabras propias.
 
 ## Resultados

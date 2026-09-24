@@ -11,6 +11,17 @@ x-api: &api
   depends_on:
     db:
       condition: service_healthy
+  healthcheck:
+    test:
+      [
+        "CMD",
+        "node",
+        "-e",
+        "fetch('http://localhost:3000/').then(r=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))",
+      ]
+    interval: 3s
+    timeout: 2s
+    retries: 20
   cpus: ${INSTANCE_CPUS:-1.0}
   mem_limit: ${INSTANCE_MEMORY:-1g}
 
@@ -35,8 +46,18 @@ services:
     <<: *api
   api-2:
     <<: *api
+    depends_on:
+      db:
+        condition: service_healthy
+      api-1:
+        condition: service_healthy
   api-3:
     <<: *api
+    depends_on:
+      db:
+        condition: service_healthy
+      api-1:
+        condition: service_healthy
 
   balanceador:
     image: nginx:1.27-alpine
