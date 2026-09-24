@@ -6,5 +6,6 @@ import { SocioDistribucion } from './entities/socio-distribucion.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Cotizacion, Producto, SocioDistribucion])],
+  exports: [TypeOrmModule],
 })
 export class CotizacionModule {}
