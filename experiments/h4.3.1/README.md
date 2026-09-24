@@ -75,6 +75,20 @@ rápido se puede usar `DURATION=10s RATES="200 500"`.
 
 ## Ejecución en AWS y evidencia
 
+La ejecución realizada el 24 de septiembre de 2026 usó AWS Academy en
+`us-east-1`: tres EC2 `t2.medium` para la aplicación, una EC2 para PostgreSQL
+16, un Application Load Balancer y k6 0.55.0 desde CloudShell. Las corridas
+duraron 15 segundos por nivel para proteger el presupuesto académico. Los
+resultados observados están en [RESULTADOS.md](./RESULTADOS.md), los valores
+exactos en [AWS_RESULTADOS.tsv](./AWS_RESULTADOS.tsv) y el informe consolidado
+en `output/pdf/Informe_Experimento_H4_3_1.pdf`. Los JSON crudos permanecen en
+CloudShell como `~/h431-aws-results.tgz`.
+
+Las instrucciones siguientes describen una reproducción más cercana a un
+entorno de producción con ECR/RDS y una duración mayor; no deben confundirse
+con la infraestructura económica utilizada para obtener los resultados ya
+registrados.
+
 No había infraestructura AWS en el repositorio. La forma mínima de reproducir
 el experimento sin confundir un ensayo local con evidencia AWS es:
 
