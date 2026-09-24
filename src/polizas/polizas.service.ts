@@ -15,9 +15,7 @@ export class PolizasService {
     const poliza = this.polizaRepository.create({
       estado: EstadoPoliza.EMITIDA,
       clienteId: datos.clienteId,
-      cotizacionId: datos.cotizacionId,
       productoId: datos.productoId,
-      suscripcion: datos.suscripcion,
     });
 
     return this.polizaRepository.save(poliza);

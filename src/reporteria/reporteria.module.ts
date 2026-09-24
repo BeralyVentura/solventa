@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ReporteReaseguro } from './entities/reporte-reaseguro.entity';
+import { ReporteRegulatorio } from './entities/reporte-regulatorio.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ReporteReaseguro])],
+  imports: [TypeOrmModule.forFeature([ReporteRegulatorio])],
 })
 export class ReporteriaModule {}

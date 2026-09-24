@@ -32,10 +32,10 @@ export class SuscripcionService {
     if (decision === DecisionSuscripcion.APROBADO) {
       const poliza = await this.polizasService.emitir({
         clienteId: datos.clienteId,
-        cotizacionId: datos.cotizacionId,
         productoId: datos.productoId,
-        suscripcion,
       });
+      suscripcion.poliza = poliza;
+      await this.suscripcionRepository.save(suscripcion);
       return { suscripcion, poliza };
     }
 

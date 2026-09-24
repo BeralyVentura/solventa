@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Poliza } from '../../polizas/entities/poliza.entity';
 
 export enum DecisionSuscripcion {
@@ -18,6 +24,7 @@ export class Suscripcion {
   @Column({ type: 'uuid', unique: true })
   cotizacionId!: string;
 
-  @OneToOne(() => Poliza, (p) => p.suscripcion)
-  poliza!: Poliza;
+  @OneToOne(() => Poliza, (p) => p.suscripcion, { nullable: true })
+  @JoinColumn()
+  poliza!: Poliza | null;
 }
