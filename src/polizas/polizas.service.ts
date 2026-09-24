@@ -17,7 +17,7 @@ export class PolizasService {
       clienteId: datos.clienteId,
       cotizacionId: datos.cotizacionId,
       productoId: datos.productoId,
-      subscripcion: datos.subscripcion,
+      suscripcion: datos.suscripcion,
     });
 
     return this.polizaRepository.save(poliza);

@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
-import { Subscripcion } from '../../suscripcion/entities/subscripcion.entity';
+import { Suscripcion } from '../../suscripcion/entities/suscripcion.entity';
 
 export enum EstadoPoliza {
   PENDIENTE = 'pendiente',
@@ -25,8 +25,8 @@ export class Poliza {
   @Column({ type: 'uuid' })
   productoId!: string;
 
-  @OneToOne(() => Subscripcion, (s) => s.poliza, { cascade: true })
+  @OneToOne(() => Suscripcion, (s) => s.poliza, { cascade: true })
   @JoinColumn()
-  subscripcion!: Subscripcion;
+  suscripcion!: Suscripcion;
 
 }

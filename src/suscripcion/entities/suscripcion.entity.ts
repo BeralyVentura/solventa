@@ -7,14 +7,17 @@ export enum DecisionSuscripcion {
   RECHAZADO = 'rechazado',
 }
 
-@Entity('subscripciones')
-export class Subscripcion {
+@Entity('suscripciones')
+export class Suscripcion {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column({ type: 'enum', enum: DecisionSuscripcion })
   decision!: DecisionSuscripcion;
 
-  @OneToOne(() => Poliza, (p) => p.subscripcion)
+  @Column({ type: 'uuid', unique: true })
+  cotizacionId!: string;
+
+  @OneToOne(() => Poliza, (p) => p.suscripcion)
   poliza!: Poliza;
 }

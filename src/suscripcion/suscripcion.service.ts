@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
-  Subscripcion,
+  Suscripcion,
   DecisionSuscripcion,
-} from './entities/subscripcion.entity';
+} from './entities/suscripcion.entity';
 import { PolizasService } from '../polizas/polizas.service';
 import { DecidirSuscripcionDto } from './dto/decidir-suscripcion.dto';
 
@@ -14,16 +14,19 @@ const UMBRAL_REVISION_ASISTIDA = 0.5;
 @Injectable()
 export class SuscripcionService {
   constructor(
-    @InjectRepository(Subscripcion)
-    private readonly subscripcionRepository: Repository<Subscripcion>,
+    @InjectRepository(Suscripcion)
+    private readonly suscripcionRepository: Repository<Suscripcion>,
     private readonly polizasService: PolizasService,
   ) {}
 
   async decidir(datos: DecidirSuscripcionDto) {
     const decision = this.evaluarUmbral(datos.score);
 
-    const subscripcion = await this.subscripcionRepository.save(
-      this.subscripcionRepository.create({ decision }),
+    const suscripcion = await this.suscripcionRepository.save(
+      this.suscripcionRepository.create({
+        decision,
+        cotizacionId: datos.cotizacionId,
+      }),
     );
 
     if (decision === DecisionSuscripcion.APROBADO) {
@@ -31,12 +34,12 @@ export class SuscripcionService {
         clienteId: datos.clienteId,
         cotizacionId: datos.cotizacionId,
         productoId: datos.productoId,
-        subscripcion,
+        suscripcion,
       });
-      return { subscripcion, poliza };
+      return { suscripcion, poliza };
     }
 
-    return { subscripcion };
+    return { suscripcion };
   }
 
   private evaluarUmbral(score: number): DecisionSuscripcion {
